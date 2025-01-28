@@ -1,6 +1,5 @@
 import random
-
-words = ["Joan", "Fashion", "Soda", "Minor", "Radio"]
+from words import words
 
 hangman_art = {
     0: (" o "),
@@ -45,7 +44,7 @@ while is_running:
     if guessed_letter.isdigit():
         print("Please enter alphabetic letters Not Numbers!")
         continue
-    
+
     if len(guessed_letter) != 1:
         print("Please Enter only one Letter!")
         continue
@@ -73,5 +72,6 @@ while is_running:
         is_running = False
 
     if guess_count == 6:
-        print("You LOSE")
+        print("You LOOSE")
+        print(f"The word was {random_word}.")
         is_running = False
