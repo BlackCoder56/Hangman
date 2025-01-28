@@ -42,6 +42,14 @@ while is_running:
         print("Please enter a Letter!")
         continue
 
+    if guessed_letter.isdigit():
+        print("Please enter alphabetic letters Not Numbers!")
+        continue
+    
+    if len(guessed_letter) != 1:
+        print("Please Enter only one Letter!")
+        continue
+
     if guessed_letter not in cleaned_word:
         showArt(guess_count)
         if time_lapse != 0:
