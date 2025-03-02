@@ -1,8 +1,8 @@
 import random as ran
 from words import words
 
+# importing a list of words
 words = words
-
 
 # Method to print hangman Art
 def shoArt(trials):
@@ -86,7 +86,8 @@ def main():
                         shoArt(trials)
                     else:
                         print(showHint(hint))
-                        shoArt(trials)                    
+                        shoArt(trials)    
+                    # increasing trials by 1
                     trials += 1
 
                 cleaned = showHint(hint)
@@ -118,4 +119,5 @@ def main():
             print("#Invalid Input!#")
             print("################")
 
+# Running the main function to start the app
 main()
