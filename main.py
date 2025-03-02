@@ -1,77 +1,121 @@
-import random
+import random as ran
 from words import words
 
-hangman_art = {
-    0: (" o "),
-    1: (" o ",
-        "/"),
-    2: (" o ",
-        "/|"),
-    3: (" o ",
-        "/|\\"),
-    4: (" o ",
-        "/|\\",
-        "/"),
-    5: (" o ",
-        "/|\\",
-        "/ \\")
-}
+words = words
 
-def showArt(guess_count):
-    print("\n***************")
-    for line in hangman_art[guess_count]:
-        print(line)    
-    print("***************")
 
+# Method to print hangman Art
+def shoArt(trials):
+    # Hangman dictionary of tuples
+    art = {
+        0:(" o "),
+        1:("       o ",
+           "      /"),
+        2:("       o ",
+           "      /|"),
+        3:("       o ",
+           "      /|\\"),
+        4:("       o ",
+           "      /|\\",
+           "      /"),
+        5:("       o ",
+           "      /|\\",
+           "      / \\")
+    }
+    # for loop to print art line by line
+    for line in art[trials]:
+        print(line)
+
+# Function to return random word hint without spaces
 def showHint(hint):
     return "".join(hint)
 
-random_word = random.choice(words)
-cleaned_word = random_word.lower()
+# Main function to do most of the work
+def main():
+    # trials variable to keep track of the number of incorrect guesses
+    trials = 0
 
-hint = ["_ "]*len(random_word)
-is_running = True
-guess_count = 0
-time_lapse = 5
+    # is_running boolean is True when trials are not 6
+    # Or the random word has not been guessed yet.
+    is_running = True
 
-while is_running:
-    guessed_letter = input("Guess Letter: ").lower()
-    
-    if guessed_letter == "":
-        print("Please enter a Letter!")
-        continue
+    # ranword stores a random word from a List
+    ranword = ran.choice(words)
 
-    if guessed_letter.isdigit():
-        print("Please enter alphabetic letters Not Numbers!")
-        continue
+    # hint replaces letters in the random word with underscores
+    # eg. ["_ ", "_ ", "_ "]
+    hint = ["_ "]*len(ranword.lower())
 
-    if len(guessed_letter) != 1:
-        print("Please Enter only one Letter!")
-        continue
+    print("Welcome to my hangman app:")
 
-    if guessed_letter not in cleaned_word:
-        showArt(guess_count)
-        if time_lapse != 0:
-            print("Incorrect guess, Try Again!")
-            print("You have ", time_lapse, " times remaining.")
-            print(showHint(hint))
+    # iniputt variable stores abstract value before user's input
+    iniputt = ''
+
+    # The loop runs basing on it's conditions
+    while(iniputt != 'q' and iniputt != 'Q'):
+        # This is a prompt and stores user input in iniputt
+        iniputt = input("If you want to start a new game:\n1. Press enter. \n2. To quit game press quit(q/Q): ")
+
+        # if statement to check user input
+        if iniputt.lower() == 'q':
+            print("###############")
+            print("## GoodBye!! ##")
+            print("##############")
+            continue
+        # if statement to check user input
+        elif iniputt == "":
+            while(is_running):
+                # prints hint
+                print(showHint(hint))
+
+                # Prompts user to input a single letter
+                user_input = input("Enter your letter: ")
+
+                # Checking if user input value is in random word
+                if user_input.lower() in ranword.lower():
+                    # Looping through the random word
+                    for index, letter in enumerate(ranword.lower()):
+                        # if statement checks letters index in random word
+                        if letter.lower() == user_input.lower():
+                            hint[index] = letter.lower()
+                            # print(showHint(hint))
+                else:
+                    if trials == 5:
+                        print("\n")
+                        print("*****************")
+                        shoArt(trials)
+                    else:
+                        print(showHint(hint))
+                        shoArt(trials)                    
+                    trials += 1
+
+                cleaned = showHint(hint)
+
+                if cleaned.capitalize() == ranword.capitalize():
+                    print("\n")
+                    print("*******************")
+                    print("You Won!")
+                    print(f"The word was \"{ranword.capitalize()}\"")
+                    print("*****************")
+                    print("\n")
+                    is_running = False
+                elif trials == 6:
+                    print("You LOST!")
+                    print(f"The word was \"{ranword.capitalize()}\"")
+                    print("Try Again Later.")
+                    print("*******************")
+                    print("\n")
+                    is_running = False
+
+            # Reseting Assests
+            is_running = True
+            trials = 0
+            is_running = True
+            ranword = ran.choice(words)
+            hint = ["_ "]*len(ranword.lower())
         else:
-            print("You're out of Guesses!")
-        
-        time_lapse -= 1
-        guess_count += 1      
-        
-    for index, letter in enumerate(cleaned_word):
-        if letter == guessed_letter:
-            hint[index] = guessed_letter
-            print(showHint(hint))
-    
-    x = "".join(hint)
-    if x == cleaned_word:
-        print("\nYou Win")
-        is_running = False
+            print("################")
+            print("#Invalid Input!#")
+            print("################")
 
-    if guess_count == 6:
-        print("You LOOSE")
-        print(f"The word was {random_word}.")
-        is_running = False
+main()
